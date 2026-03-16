@@ -2137,3 +2137,35 @@ input.taxa-masked {
     pointer-events: none;
     font-style: italic;
 }
+
+/* ── LOGIN LOGO TEXT ── */
+.login-logo-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+    gap: 4px;
+    margin-bottom: 24px;
+}
+
+.login-logo-main {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 600;
+    letter-spacing: 12px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #c9a84c 0%, #f0d078 45%, #c9a84c 70%, #a88a3a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-rendering: optimizeLegibility;
+}
+
+.login-logo-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 6px;
+    color: var(--g500);
+    text-transform: uppercase;
+}
