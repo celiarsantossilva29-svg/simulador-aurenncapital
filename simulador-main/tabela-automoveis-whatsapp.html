@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consórcio de Automóveis - Embracon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Montserrat:wght@700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 1080px;
+            height: 1080px;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+        }
+
+        .container {
+            width: 1080px;
+            height: 1080px;
+            position: relative;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Background decorative overlay */
+        .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 340px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+            z-index: 0;
+        }
+
+        .bg-overlay::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(to bottom, transparent, #111);
+        }
+
+        /* Car icon decorative */
+        .car-icon {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            width: 120px;
+            height: 120px;
+            opacity: 0.15;
+            z-index: 1;
+        }
+
+        .car-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: white;
+        }
+
+        /* Title section */
+        .title-area {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 40px 50px 20px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .title-left h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 48px;
+            color: white;
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .title-left h1 .italic {
+            font-style: italic;
+            color: #e63946;
+        }
+
+        .title-left h1 .white {
+            font-weight: 800;
+            color: white;
+        }
+
+        .badge {
+            background: #e63946;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 6px;
+            text-align: center;
+            transform: rotate(-2deg);
+            box-shadow: 0 4px 20px rgba(230, 57, 70, 0.4);
+        }
+
+        .badge .parcelas {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .badge .percent {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .badge .menores {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        /* Table section */
+        .table-section {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 20px 50px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #1a1a2e, #2d2d4e);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px 12px 0 0;
+            padding: 16px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+        }
+
+        .table-header svg {
+            width: 28px;
+            height: 28px;
+            fill: #e63946;
+        }
+
+        .table-header span {
+            font-weight: 800;
+            font-size: 20px;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 0 0 12px 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        thead th {
+            background: #2d2d4e;
+            color: white;
+            font-weight: 700;
+            font-size: 17px;
+            padding: 16px 20px;
+            text-align: center;
+            border-bottom: 3px solid #e63946;
+        }
+
+        tbody tr {
+            transition: background 0.2s;
+        }
+
+        tbody tr:nth-child(even) {
+            background: rgba(240, 240, 245, 0.8);
+        }
+
+        tbody tr:nth-child(odd) {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        tbody td {
+            padding: 18px 20px;
+            text-align: center;
+            font-size: 19px;
+            font-weight: 600;
+            color: #1a1a2e;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        tbody td:first-child {
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        tbody td:nth-child(2) {
+            color: #e63946;
+            font-weight: 700;
+        }
+
+        tbody td:nth-child(3) {
+            color: #2d8a4e;
+            font-weight: 700;
+        }
+
+        /* Footer */
+        .footer {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 16px 50px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer .note {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+
+        .footer .logos {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .footer .logo-crinvest {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer .logo-crinvest img {
+            height: 45px;
+        }
+
+        .footer .logo-embracon {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer .logo-embracon img {
+            height: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Background -->
+        <div class="bg-overlay"></div>
+
+        <!-- Decorative car icon -->
+        <div class="car-icon">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z" />
+            </svg>
+        </div>
+
+        <!-- Title area -->
+        <div class="title-area">
+            <div class="title-left">
+                <h1>
+                    <span class="italic">CONSÓRCIO</span><br>
+                    <span class="white">DE AUTOMÓVEL</span>
+                </h1>
+            </div>
+            <div class="badge">
+                <div class="parcelas">PARCELAS</div>
+                <div class="percent">50%</div>
+                <div class="menores">MENORES</div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-section">
+            <div class="table-header">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z" />
+                </svg>
+                <span>Consórcio de Automóveis</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Valor do Crédito</th>
+                        <th>1ª a 12ª Parcela</th>
+                        <th>Demais Parcelas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>50 mil</td>
+                        <td>R$ 549,17</td>
+                        <td>R$ 399,17</td>
+                    </tr>
+                    <tr>
+                        <td>80 mil</td>
+                        <td>R$ 878,67</td>
+                        <td>R$ 638,67</td>
+                    </tr>
+                    <tr>
+                        <td>100 mil</td>
+                        <td>R$ 1.098,33</td>
+                        <td>R$ 798,33</td>
+                    </tr>
+                    <tr>
+                        <td>130 mil</td>
+                        <td>R$ 1.427,83</td>
+                        <td>R$ 1.037,83</td>
+                    </tr>
+                    <tr>
+                        <td>150 mil</td>
+                        <td>R$ 1.647,50</td>
+                        <td>R$ 1.197,50</td>
+                    </tr>
+                    <tr>
+                        <td>200 mil</td>
+                        <td>R$ 2.196,67</td>
+                        <td>R$ 1.596,67</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="note">*Parcelas 50% menores até a contemplação</div>
+            <div class="logos">
+                <div class="logo-crinvest">
+                    <img src="logo-crinvest.png" alt="Aurenn Capital">
+                </div>
+                <div class="logo-embracon">
+                    <img src="logo-embracon.png" alt="Embracon">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

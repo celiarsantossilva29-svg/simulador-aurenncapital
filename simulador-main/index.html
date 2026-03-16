@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <!-- Login Script Removed -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <title>Simulador de Consórcio - Aurenn Capital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=2024030455">
+    <script>
+        // Auto-redirect to localhost if opened via file://
+        if (window.location.protocol === 'file:') {
+            document.write('<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:Inter,sans-serif;background:#f5f5f5;"><div style="text-align:center;"><h2>Redirecionando para o servidor...</h2><p style="color:#666;">Abrindo em http://localhost:8000</p></div></div>');
+            window.location.href = 'http://localhost:8000';
+        }
+    </script>
+</head>
+
+<body>
+
+    <!-- HEADER with centered logo -->
+    <div class="header">
+        <button class="tab-btn-back" id="btnVoltarHome" onclick="voltarHome()" style="display: none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5"></path>
+                <path d="M12 19l-7-7 7-7"></path>
+            </svg>
+            Voltar
+        </button>
+        <div class="header-logo-text">
+            <span class="header-logo-main">AURENN</span>
+            <span class="header-logo-sub">CAPITAL</span>
+        </div>
+
+    </div>
+
+    <!-- HOME SCREEN -->
+    <div id="homeScreen" class="home-screen">
+        <div class="home-inner">
+            <h1 class="home-title">Escolha sua ferramenta</h1>
+            <p class="home-subtitle">Selecione abaixo para começar</p>
+            <div class="home-cards">
+                <!-- Card Simulador -->
+                <div class="home-card" onclick="navigateTo('simulador')">
+                    <div class="home-card-icon">
+                        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                            <line x1="8" y1="6" x2="16" y2="6"></line>
+                            <line x1="8" y1="10" x2="10" y2="10"></line>
+                            <line x1="14" y1="10" x2="16" y2="10"></line>
+                            <line x1="8" y1="14" x2="10" y2="14"></line>
+                            <line x1="14" y1="14" x2="16" y2="14"></line>
+                            <line x1="8" y1="18" x2="16" y2="18"></line>
+                        </svg>
+                    </div>
+                    <h2 class="home-card-title">Simulador</h2>
+                    <p class="home-card-desc">Simule parcelas, lances e comparações de consórcio com diversas
+                        administradoras.</p>
+                </div>
+                <!-- Card Comparativo -->
+                <div class="home-card" onclick="navigateTo('comparativo')">
+                    <div class="home-card-icon">
+                        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="2" x2="12" y2="10"></line>
+                            <line x1="3" y1="13" x2="21" y2="7"></line>
+                            <!-- Left Scale -->
+                            <line x1="6" y1="12" x2="3" y2="18"></line>
+                            <line x1="6" y1="12" x2="9" y2="18"></line>
+                            <line x1="3" y1="18" x2="9" y2="18"></line>
+                            <path d="M3 18 a 3 3 0 0 0 6 0"></path>
+                            <!-- Right Scale -->
+                            <line x1="18" y1="8" x2="15" y2="14"></line>
+                            <line x1="18" y1="8" x2="21" y2="14"></line>
+                            <line x1="15" y1="14" x2="21" y2="14"></line>
+                            <path d="M15 14 a 3 3 0 0 0 6 0"></path>
+                        </svg>
+                    </div>
+                    <h2 class="home-card-title">Comparativo</h2>
+                    <p class="home-card-desc">Compare financiamento bancário (SAC/PRICE) com consórcio e veja a economia
+                        real.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- MODE TITLE + SELECTORS -->
+    <div class="title-section" id="toolbarSecundaria" style="display: none;">
+        <div class="header-actions" style="position: absolute; right: 32px; top: 50%; transform: translateY(-50%);">
+            <button class="btn-pdf" onclick="gerarPDF()"
+                style="background: var(--gold-gradient); border: none; color: #111; font-weight: 600;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                Gerar PDF
+            </button>
+        </div>
+        <div class="mode-title-row">
+            <button type="button" id="btnToggleTaxas" class="btn-eye" onclick="toggleTaxas()"
+                title="Mostrar/Ocultar taxas">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                </svg>
+            </button>
+            <button class="mode-text-btn active" id="btnIntegral" onclick="setMode('integral')">Parcela
+                Integral</button>
+            <span class="mode-divider">|</span>
+            <button class="mode-text-btn" id="btnReduzida" onclick="setMode('reduzida')">Parcela Reduzida</button>
+            <div id="pctReducaoContainer" style="display:none; align-items:center; gap:6px; margin-left:8px">
+                <span style="font-size:14px; font-weight:600; color:var(--g500)">Redução:</span>
+                <input type="number" id="pctReducao" class="tipo-select" value="25" min="0" max="99"
+                    onchange="calcular()" style="width: 70px; text-align:center; padding:4px 8px; height:36px;">
+                <span class="unit-inline" style="color:var(--g500); font-weight:600">%</span>
+            </div>
+
+            <select id="tipoBem" class="tipo-select" onchange="calcular()">
+                <option value="imovel" selected>Imóvel</option>
+                <option value="automovel">Automóvel</option>
+                <option value="servicos">Serviços</option>
+            </select>
+
+            <span class="admin-sep">-</span>
+
+            <select id="administradora" class="admin-select" onchange="trocarAdministradora()">
+                <option value="porto_seguro" selected>Porto Seguro</option>
+                <option value="embracon">Embracon</option>
+                <option value="rodobens">Rodobens</option>
+                <option value="canopus">Canopus</option>
+                <option value="magalu">Magalu Consórcio</option>
+            </select>
+            <span id="adminLogoContainer" class="admin-logo-inline"></span>
+        </div>
+        <div style="display:none">
+        </div>
+    </div>
+
+
+    <!-- MAIN SIMULATOR -->
+    <div id="tabSimulador" class="tab-content">
+        <div class="simulator">
+            <!-- LEFT: INPUTS -->
+            <div class="inputs-panel">
+                <div class="result-title" style="margin-bottom: 8px;">
+                    <span class="rt-bold" style="font-size: 16px; color: var(--gold-dark);">Condições do Plano</span>
+                </div>
+                <!-- BOX: INFO BÁSICA -->
+                <div class="lance-box"
+                    style="margin-bottom: 24px; border: none; background: transparent; padding: 0; box-shadow: none;">
+                    <!-- Row 1: Taxas -->
+                    <div class="taxas-grid" id="taxasRow" style="display:none; margin-bottom: 12px;">
+                        <div class="field">
+                            <label class="field-label">Taxa Adm. :</label>
+                            <div class="field-input">
+                                <input type="number" id="taxaAdm" value="17.0" step="0.1" min="0" max="30"
+                                    onchange="calcular()" oninput="calcular()">
+                                <span class="unit">%</span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="field-label">Fundo Reserva :</label>
+                            <div class="field-input">
+                                <input type="number" id="fundoReserva" value="0.5" step="0.1" min="0" max="10"
+                                    onchange="calcular()" oninput="calcular()">
+                                <span class="unit">%</span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="field-label">Seguro <span class="info-pf">(PF)</span></label>
+                            <div class="field-input">
+                                <input type="number" id="seguroPrestamista" value="0" step="0.001" min="0" max="1"
+                                    onchange="calcular()" oninput="calcular()">
+                                <span class="unit">%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Crédito + Prazo -->
+                    <div class="row-2col">
+                        <div class="field">
+                            <label class="field-label">Valor do Crédito :</label>
+                            <div class="field-input">
+                                <span class="prefix">R$</span>
+                                <input type="text" id="valorCredito" value="0,00" onchange="calcular()"
+                                    oninput="formatCurrencyInput(this); calcular()">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="field-label">Prazo do Grupo :</label>
+                            <div class="field-input">
+                                <input type="number" id="prazoGrupo" value="0" step="1" min="1" max="240"
+                                    onchange="calcular()" oninput="calcular()">
+                                <span class="unit">Meses</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Reduzir -->
+                    <div class="row-2col">
+                        <div class="field">
+                            <label class="field-label">Reduzir após a contemplação: <span class="tooltip-icon"
+                                    title="Escolha se deseja reduzir o valor da parcela ou o prazo após a contemplação">&#9432;</span></label>
+                            <div class="radio-row">
+                                <label class="radio-opt">
+                                    <input type="radio" name="reducao" value="parcela" checked onchange="calcular()">
+                                    <span>Parcela</span>
+                                </label>
+                                <label class="radio-opt">
+                                    <input type="radio" name="reducao" value="prazo" onchange="calcular()">
+                                    <span>Prazo</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="border: 0; height: 1px; background: var(--g200); margin: 16px 0;">
+
+                    <!-- LANCE BOX -->
+                    <div class="result-title" style="margin-bottom: 8px;">
+                        <span class="rt-bold" style="font-size: 16px; color: var(--gold-dark);">Oferta de Lance</span>
+                    </div>
+                    <div class="lance-box" style="border: none; background: transparent; padding: 0; box-shadow: none;">
+                        <!-- Row: Embutido -->
+                        <div class="lance-row" style="margin-bottom:8px;">
+                            <div class="lance-field">
+                                <label class="lance-lbl-red">% Lance Embutido</label>
+                                <div class="field-input">
+                                    <input type="number" id="lanceEmbutido" value="0.0" step="0.5" min="0" max="50"
+                                        onchange="calcular()" oninput="calcular()">
+                                    <span class="unit">%</span>
+                                </div>
+                            </div>
+                            <div class="lance-field">
+                                <label class="lance-lbl-dark">Valor Embutido</label>
+                                <div class="field-input readonly">
+                                    <span class="prefix">R$</span>
+                                    <input type="text" id="valorEmbutido" value="0,00" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Row: A pagar -->
+                        <div class="lance-row" style="margin-bottom:8px;">
+                            <div class="lance-field" id="boxLancePagarPct">
+                                <label class="lance-lbl-red">% Lance a pagar</label>
+                                <div class="field-input">
+                                    <input type="number" id="lancePagar" value="0.0" step="0.5" min="0" max="50"
+                                        onchange="calcular()" oninput="calcular()">
+                                    <span class="unit">%</span>
+                                </div>
+                            </div>
+                            <div class="lance-field" id="boxLancePagarVal">
+                                <label class="lance-lbl-dark">Valor a pagar <span class="tooltip-icon"
+                                        title="Valor Total - Valor Embutido">&#9432;</span></label>
+                                <div class="field-input readonly">
+                                    <span class="prefix">R$</span>
+                                    <input type="text" id="valorPagar" value="0,00" onchange="calcular()"
+                                        oninput="formatCurrencyInput(this); calcular()" readonly>
+                                </div>
+                            </div>
+                            <div class="lance-toggle-wrapper"
+                                style="display:flex; align-items:flex-end; padding-bottom:1px; flex: 0 0 auto;">
+                                <button type="button" id="btnToggleFluxo" class="toggle-btn-small"
+                                    onclick="toggleFluxoLance()" title="Alternar modo de preenchimento">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m16 3 4 4-4 4" />
+                                        <path d="M20 7H4" />
+                                        <path d="m8 21-4-4 4-4" />
+                                        <path d="M4 17h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Row: Total -->
+                        <div class="lance-row">
+                            <div class="lance-field">
+                                <label class="lance-lbl-red">% Lance Total</label>
+                                <div class="field-input readonly">
+                                    <input type="text" id="lanceTotal" value="0,00" readonly>
+                                    <span class="unit">%</span>
+                                </div>
+                            </div>
+                            <div class="lance-field">
+                                <label class="lance-lbl-dark">Valor Total</label>
+                                <div class="field-input readonly" style="background:var(--white);">
+                                    <span class="prefix">R$</span>
+                                    <input type="text" id="valorTotal" value="0,00" readonly
+                                        style="font-weight:600;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: RESULTS -->
+            <div class="results-panel">
+                <div class="result-title"
+                    style="margin-bottom: 12px; border-bottom: 1px solid var(--g200); padding-bottom: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold-dark)"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                        <path d="M4 14l4-4 4 4 8-8"></path>
+                    </svg>
+                    <span class="rt-bold" style="font-size: 16px; color: var(--gold-dark);">Resultado da
+                        Simulação</span>
+                </div>
+                <!-- Primeiras N Parcelas -->
+                <div class="result-group">
+                    <div class="result-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold-dark)"
+                            stroke-width="2" stroke-linejoin="round" style="margin-right:6px;">
+                            <circle cx="12" cy="8" r="7" />
+                            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+                        </svg>
+                        <span class="rt-main">Primeiras</span>
+                        <select id="primeirasN" class="inline-select" onchange="calcular()">
+                            <option value="1">À Vista</option>
+                            <option value="3">3</option>
+                            <option value="5">5</option>
+                            <option value="12" selected>12</option>
+                        </select>
+                        <span class="rt-main">parcelas</span>
+                        <!-- Antecipada controls -->
+                        <span class="antecipada-inline" id="antecipada-group">
+                            (Antecipada
+                            <input type="number" id="antecipada" class="inline-input small" value="2" step="0.1" min="0"
+                                max="100" onchange="calcular()" oninput="calcular()">
+                            <span class="unit-inline">%</span>
+                            + parcela)
+                        </span>
+                        <span class="rt-sub-gold" id="antecipada-label">(Antecipada + parcela do mês)</span>
+                    </div>
+                    <div class="field-input result-field">
+                        <span class="prefix">R$</span>
+                        <input type="text" id="resultPrimeiras" value="18.494,62" readonly>
+                    </div>
+                </div>
+
+                <!-- Demais Parcelas -->
+                <div class="result-group">
+                    <div class="result-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold-dark)"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            <polyline points="9 12 11 14 15 10" />
+                        </svg>
+                        <span class="rt-bold">Demais Parcelas</span>
+                        <span class="rt-sub-gold">(Antes da contemplação)</span>
+                    </div>
+                    <div class="field-input result-field">
+                        <span class="prefix">R$</span>
+                        <input type="text" id="resultDemais" value="15.161,29" readonly>
+                    </div>
+                </div>
+
+                <!-- Crédito Líquido -->
+                <div class="result-group"
+                    style="background: linear-gradient(to right, #faf7f0, #fffcf5); padding: 12px; border-radius: 8px; border: 1px dashed var(--gold); margin: 8px 0;">
+                    <div class="result-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold-dark)"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;">
+                            <rect x="2" y="6" width="20" height="12" rx="2" />
+                            <circle cx="12" cy="12" r="2" />
+                            <path d="M6 12h.01M18 12h.01" />
+                        </svg>
+                        <span class="rt-bold big" style="color:var(--gold-dark)">Crédito Líquido</span>
+                    </div>
+                    <div class="field-input result-field highlight"
+                        style="border-color: var(--gold); background: #ffffff;">
+                        <span class="prefix highlight-prefix">R$</span>
+                        <input type="text" id="resultCredLiquido" value="1.400.000,00" readonly class="highlight-value">
+                    </div>
+                </div>
+
+                <!-- Valor Parcela pós-contemplado -->
+                <div class="result-group">
+                    <div class="result-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold-dark)"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                        </svg>
+                        <span class="rt-bold">Valor Parcela</span>
+                        <span class="rt-sub-gold">(pós-contemplado)</span>
+                    </div>
+                    <div class="field-input result-field">
+                        <span class="prefix">R$</span>
+                        <input type="text" id="resultPosContemp" value="8.931,85" readonly>
+                    </div>
+                </div>
+
+                <!-- Prazo Restante -->
+                <div class="result-group">
+                    <div class="result-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold-dark)"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
+                        </svg>
+                        <span class="rt-bold">Prazo Restante</span>
+                    </div>
+                    <div class="field-input result-field">
+                        <input type="text" id="resultPrazoRestante" value="154" readonly>
+                        <span class="unit">Meses</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOTES SECTION -->
+        <div class="notes-panel">
+            <div class="result-title">
+                <span class="rt-bold">Observações para o Cliente</span>
+            </div>
+            <!-- Rich Text Toolbar -->
+            <div class="editor-toolbar">
+                <button type="button" class="tb-btn" onclick="formatText('bold')" title="Negrito">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H7v14h7.04c2.09 0 3.71-1.7 3.71-3.79 0-1.52-.86-2.82-2.15-3.42zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z" />
+                    </svg>
+                </button>
+                <button type="button" class="tb-btn" onclick="formatText('italic')" title="Itálico">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 4v3h2.21l-3.42 8H6v3h8v-3h-2.21l3.42-8H18V4z" />
+                    </svg>
+                </button>
+                <button type="button" class="tb-btn" onclick="formatText('underline')" title="Sublinhado">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 17c3.31 0 6-2.69 6-6V3h-2.5v8c0 1.93-1.57 3.5-3.5 3.5S8.5 12.93 8.5 11V3H6v8c0 3.31 2.69 6 6 6zm-7 2v2h14v-2H5z" />
+                    </svg>
+                </button>
+                <button type="button" class="tb-btn" onclick="formatText('strikeThrough')" title="Tachado">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 19h4v-3h-4v3zM5 4v3h5v3h4V7h5V4H5zM3 14h18v-2H3v2z" />
+                    </svg>
+                </button>
+                <span class="tb-sep"></span>
+                <button type="button" class="tb-btn" onclick="formatText('hilite')" title="Grifar (Destaque)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M17.75 7L14 3.25l-10 10V17h3.75l10-10zm2.96-2.96a1 1 0 000-1.41L18.37.29a1 1 0 00-1.41 0L15 2.25 18.75 6l1.96-1.96z" />
+                        <rect x="2" y="19" width="20" height="3" rx="1" fill="#FFD54F" />
+                    </svg>
+                </button>
+                <input type="color" class="tb-color" id="textColorPicker" value="#000000"
+                    onchange="formatText('foreColor', this.value)" title="Cor do Texto">
+                <span class="tb-sep"></span>
+                <select class="tb-select" onchange="formatText('fontSize', this.value); this.selectedIndex=0;"
+                    title="Tamanho da Fonte">
+                    <option value="" disabled selected>Tamanho</option>
+                    <option value="1">Pequeno</option>
+                    <option value="3">Normal</option>
+                    <option value="5">Grande</option>
+                    <option value="7">Muito Grande</option>
+                </select>
+                <span class="tb-sep"></span>
+                <button type="button" class="tb-btn" onclick="formatText('insertUnorderedList')" title="Lista">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z" />
+                    </svg>
+                </button>
+                <button type="button" class="tb-btn" onclick="formatText('removeFormat')" title="Limpar Formatação">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M3.27 5L2 6.27l6.97 6.97L6.5 19h3l1.57-3.66L16.73 21 18 19.73 3.27 5zM6 5v.18L8.82 8h2.4l-.72 1.68 2.1 2.1L14.21 8H20V5H6z" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Editable Content Area -->
+            <div id="observacoes" class="editor-content" contenteditable="true"
+                data-placeholder="Digite aqui orientações, diferenciais ou recados para o cliente..."></div>
+        </div>
+    </div>
+    </div> <!-- Fim tabSimulador -->
+
+    <div id="tabComparativo" class="tab-content">
+
+        <!-- FASE 1: WIZARD ESTILO CAIXA -->
+        <div id="compFaseInputs" style="max-width:900px; margin:0 auto; padding:24px 20px;">
+
+            <!-- BARRA DE PROGRESSO CAIXA (4 steps) -->
+            <div class="cx-progress-bar">
+                <div class="cx-prog-step done" id="wizStep1Indicator">
+                    <span class="cx-prog-num"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="3">
+                            <path d="M20 6L9 17l-5-5"></path>
+                        </svg></span>
+                    <span class="cx-prog-label">Objetivo</span>
+                </div>
+                <div class="cx-prog-line done"></div>
+                <div class="cx-prog-step active" id="wizStep2Indicator">
+                    <span class="cx-prog-num">2</span>
+                    <span class="cx-prog-label">Como Simular</span>
+                </div>
+                <div class="cx-prog-line"></div>
+                <div class="cx-prog-step" id="wizStep3Indicator">
+                    <span class="cx-prog-num">3</span>
+                    <span class="cx-prog-label">Simulação</span>
+                </div>
+                <div class="cx-prog-line"></div>
+                <div class="cx-prog-step" id="wizStep4Indicator">
+                    <span class="cx-prog-num">4</span>
+                    <span class="cx-prog-label">Resultado</span>
+                </div>
+            </div>
+
+            <!-- ═══ STEP 1: COMO SIMULAR (Cards + Inputs Inline) ═══ -->
+            <div id="wizStep1" class="wizard-panel">
+                <div style="text-align:center; margin-bottom:8px;">
+                    <span class="cx-badge-tag">Simulação rápida</span>
+                </div>
+                <h2 class="cx-page-title">Como você quer simular?</h2>
+                <p class="cx-page-subtitle">Veja estimativas a partir da prestação que você pretende assumir, da sua
+                    renda ou do valor do imóvel.</p>
+
+                <div class="cx-cards-grid">
+                    <div class="cx-card-option" id="cardPrestacao" onclick="wizSelectMode('prestacao')">
+                        <div class="cx-card-icon cx-icon-blue">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path>
+                            </svg>
+                        </div>
+                        <h3 class="cx-card-title">Pela prestação</h3>
+                        <p class="cx-card-desc">Sei quanto posso pagar por mês</p>
+                        <p class="cx-card-hint">Descubra qual imóvel cabe no seu bolso com essa parcela</p>
+                    </div>
+                    <div class="cx-card-option" id="cardRenda" onclick="wizSelectMode('renda')">
+                        <div class="cx-card-icon cx-icon-orange">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                            </svg>
+                        </div>
+                        <h3 class="cx-card-title">Pela renda</h3>
+                        <p class="cx-card-desc">Sei quanto ganho por mês</p>
+                        <p class="cx-card-hint">Saiba quanto você consegue financiar com sua renda</p>
+                    </div>
+                    <div class="cx-card-option" id="cardImovel" onclick="wizSelectMode('imovel')">
+                        <div class="cx-card-icon cx-icon-green">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                        </div>
+                        <h3 class="cx-card-title">Valor do imóvel + renda</h3>
+                        <p class="cx-card-desc">Já escolheu a casa?</p>
+                        <p class="cx-card-hint">Veja se essa casa cabe no seu bolso</p>
+                    </div>
+                </div>
+
+                <!-- Inputs Inline (aparecem ao selecionar card) -->
+                <div id="cxInlineInputs" class="cx-inline-inputs" style="display:none;">
+                    <div class="cx-inline-field">
+                        <label class="cx-inline-label">Data de nascimento <span class="cx-required">*</span></label>
+                        <input type="date" id="compNascimento" class="cx-inline-input">
+                    </div>
+                    <div class="cx-inline-field" id="fieldPrestacao" style="display:none;">
+                        <label class="cx-inline-label">Prestação desejada <span class="cx-required">*</span></label>
+                        <div class="caixa-input-group" style="margin:0;"><span class="caixa-prefix">R$</span><input
+                                type="text" id="compPrestacaoDesejada" class="cx-inline-input" placeholder="0,00"
+                                oninput="formatCurrencyInput(this)" style="border:none;background:none;"></div>
+                    </div>
+                    <div class="cx-inline-field" id="fieldRenda" style="display:none;">
+                        <label class="cx-inline-label">Renda bruta familiar <span class="cx-required">*</span></label>
+                        <div class="caixa-input-group" style="margin:0;"><span class="caixa-prefix">R$</span><input
+                                type="text" id="compRendaBruta" class="cx-inline-input" placeholder="0,00"
+                                oninput="formatCurrencyInput(this)" style="border:none;background:none;"></div>
+                    </div>
+                    <div class="cx-inline-field" id="fieldValorImovel" style="display:none;">
+                        <label class="cx-inline-label">Valor do imóvel <span class="cx-required">*</span></label>
+                        <div class="caixa-input-group" style="margin:0;"><span class="caixa-prefix">R$</span><input
+                                type="text" id="compValorCredito" class="cx-inline-input" placeholder="0,00"
+                                oninput="formatCurrencyInput(this); syncInputs('compValorCredito', 'valorCredito')"
+                                style="border:none;background:none;"></div>
+                    </div>
+                    <div class="cx-inline-field" style="align-self:flex-end;">
+                        <button type="button" class="cx-btn-calcular" onclick="executarSimulacaoCaixa()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" style="margin-right:6px;">
+                                <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                                <line x1="8" y1="6" x2="16" y2="6"></line>
+                                <line x1="8" y1="10" x2="10" y2="10"></line>
+                                <line x1="14" y1="10" x2="16" y2="10"></line>
+                                <line x1="8" y1="14" x2="10" y2="14"></line>
+                                <line x1="14" y1="14" x2="16" y2="14"></line>
+                                <line x1="8" y1="18" x2="16" y2="18"></line>
+                            </svg>
+                            Calcular
+                        </button>
+                    </div>
+                </div>
+
+                <div style="margin-top:24px;">
+                    <button type="button" class="tab-btn-back" onclick="voltarHome()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M19 12H5"></path>
+                            <path d="M12 19l-7-7 7-7"></path>
+                        </svg> Voltar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2 removed — uses default values -->
+            <div id="wizStep2" style="display:none;">
+                <input type="hidden" id="compTipoBem" value="imovel">
+                <input type="hidden" id="compFGTS" value="sim">
+                <input type="hidden" id="compServidor" value="nao">
+            </div>
+
+            <!-- ═══ STEP 3: RESULTADO + CONSÓRCIO ═══ -->
+            <div id="wizStep3" class="wizard-panel" style="display:none;">
+
+                <!-- Card Resultado Financiamento -->
+                <div class="caixa-resultado-card">
+                    <div class="caixa-resultado-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M3 21h18"></path>
+                            <path d="M3 10h18"></path>
+                            <path d="M5 6l7-3 7 3"></path>
+                            <path d="M4 10v11"></path>
+                            <path d="M20 10v11"></path>
+                            <path d="M8 14v3"></path>
+                            <path d="M12 14v3"></path>
+                            <path d="M16 14v3"></path>
+                        </svg>
+                        Resultado do Financiamento
+                    </div>
+                    <div class="caixa-resultado-body">
+                        <div class="caixa-resultado-tag" id="cxResultTag">SBPE — TR + 10,99% a.a.</div>
+                        <div class="caixa-resultado-grid">
+                            <div class="caixa-res-item"><span class="caixa-res-label">Valor financiado</span><span
+                                    class="caixa-res-value" id="cxValorFinanciado">R$ 0</span></div>
+                            <div class="caixa-res-item"><span class="caixa-res-label">Entrada mínima</span><span
+                                    class="caixa-res-value" id="cxEntrada">R$ 0</span></div>
+                            <div class="caixa-res-item"><span class="caixa-res-label">Prazo</span><span
+                                    class="caixa-res-value" id="cxPrazo">0 meses</span></div>
+                            <div class="caixa-res-item"><span class="caixa-res-label">Sistema</span><span
+                                    class="caixa-res-value" id="cxSistema">SAC</span></div>
+                            <div class="caixa-res-item"><span class="caixa-res-label">1ª Parcela</span><span
+                                    class="caixa-res-value" id="cxParcela1">R$ 0</span></div>
+                            <div class="caixa-res-item"><span class="caixa-res-label">Última Parcela</span><span
+                                    class="caixa-res-value" id="cxParcelaFinal">R$ 0</span></div>
+                            <div class="caixa-res-item caixa-res-full"><span class="caixa-res-label">Total de
+                                    Juros</span><span class="caixa-res-value" id="cxTotalJuros"
+                                    style="color:#ff3333;">R$ 0</span></div>
+                            <div class="caixa-res-item caixa-res-full" id="cxRendaEstimadaRow" style="display:none;">
+                                <span class="caixa-res-label">Renda estimada necessária</span>
+                                <span class="caixa-res-value" id="cxRendaEstimada" style="color:#2563eb;"></span>
+                            </div>
+                            <div class="caixa-res-item caixa-res-full caixa-res-total"><span
+                                    class="caixa-res-label">Total Pago</span><span class="caixa-res-value"
+                                    id="cxTotalPago">R$ 0</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align:center; margin:28px 0; color:var(--g400); font:500 13px 'Inter',sans-serif;">
+                    Agora configure o consórcio para comparar</div>
+
+                <!-- Inputs Consórcio -->
+                <div class="caixa-form-card">
+                    <div class="caixa-section" style="margin-bottom:0;">
+                        <div class="caixa-section-header">
+                            <span class="caixa-step-badge"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg></span>
+                            <span class="caixa-step-title">Condições do Consórcio</span>
+                        </div>
+                        <div class="caixa-fields">
+                            <div class="caixa-field-row">
+                                <div class="caixa-field"><label class="caixa-label">Administradora</label>
+                                    <select id="compAdministradora" class="caixa-select"
+                                        onchange="syncInputs('compAdministradora', 'administradora')">
+                                        <option value="porto_seguro" selected>Porto Seguro</option>
+                                        <option value="embracon">Embracon</option>
+                                        <option value="rodobens">Rodobens</option>
+                                        <option value="canopus">Canopus</option>
+                                        <option value="magalu">Magalu Consórcio</option>
+                                    </select>
+                                </div>
+                                <div class="caixa-field"><label class="caixa-label">Prazo do Grupo</label>
+                                    <div class="caixa-input-group"><input type="number" id="compPrazoGrupo"
+                                            class="caixa-input" value="200" step="1" min="1"
+                                            oninput="syncInputs('compPrazoGrupo', 'prazoGrupo')"><span
+                                            class="caixa-suffix">meses</span></div>
+                                </div>
+                            </div>
+                            <div class="caixa-field-row">
+                                <div class="caixa-field"><label class="caixa-label">Lance a Pagar</label>
+                                    <div class="caixa-input-group">
+                                        <span class="caixa-prefix">R$</span>
+                                        <input type="text" id="compLancePagar" class="caixa-input" placeholder="0,00"
+                                            oninput="formatCurrencyInput(this)">
+                                    </div>
+                                </div>
+                                <div class="caixa-field"><label class="caixa-label">Taxa Adm</label>
+                                    <div class="caixa-input-group"><input type="number" id="compTaxaAdm"
+                                            class="caixa-input" value="19.0" step="0.1" min="0"
+                                            oninput="syncInputs('compTaxaAdm', 'taxaAdm')"><span
+                                            class="caixa-suffix">%</span></div>
+                                </div>
+                            </div>
+                            <div class="caixa-field-row" id="compExtraTaxas" style="display:none;">
+                                <div class="caixa-field"><label class="caixa-label">Fundo Reserva</label>
+                                    <div class="caixa-input-group"><input type="number" id="compFundoReserva"
+                                            class="caixa-input" value="2.0" step="0.1" min="0"
+                                            oninput="syncInputs('compFundoReserva', 'fundoReserva')"><span
+                                            class="caixa-suffix">%</span></div>
+                                </div>
+                                <div class="caixa-field"><label class="caixa-label">Seguro (PF)</label>
+                                    <div class="caixa-input-group"><input type="number" id="compSeguroPrestamista"
+                                            class="caixa-input" value="0" step="0.001" min="0"
+                                            oninput="syncInputs('compSeguroPrestamista', 'seguroPrestamista')"><span
+                                            class="caixa-suffix">%</span></div>
+                                </div>
+                                <div class="caixa-field"><label class="caixa-label">Lance Embutido</label>
+                                    <div class="caixa-input-group"><input type="number" id="compLanceEmbutido"
+                                            class="caixa-input" value="0" step="0.5" min="0" max="50"
+                                            oninput="syncInputs('compLanceEmbutido', 'lanceEmbutido')"><span
+                                            class="caixa-suffix">%</span></div>
+                                </div>
+                            </div>
+                            <div class="caixa-field-row">
+                                <div class="caixa-field"><label class="caixa-label">Taxa de Adesão</label>
+                                    <div class="caixa-input-group">
+                                        <input type="number" id="compAdesao" class="caixa-input" value="0.00"
+                                            step="0.01" min="0" oninput="calcular()">
+                                        <span class="caixa-suffix">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="caixa-field-row">
+                                <div class="caixa-field" style="flex:1;"><label class="caixa-label"
+                                        style="font-size:11px;">Após contemplar, reduzir:</label>
+                                    <div class="radio-row" style="margin-top:6px;"><label class="radio-opt"><input
+                                                type="radio" name="compReducao" value="parcela" checked
+                                                onchange="syncRadios('compReducao', 'reducao')"> Parcela</label><label
+                                            class="radio-opt"><input type="radio" name="compReducao" value="prazo"
+                                                onchange="syncRadios('compReducao', 'reducao')"> Prazo</label></div>
+                                </div>
+                                <div class="caixa-field" style="flex:1; display:flex; align-items:flex-end;"><a href="#"
+                                        style="font-size:11px; color:var(--gold); text-decoration:underline;"
+                                        onclick="document.getElementById('compExtraTaxas').style.display = document.getElementById('compExtraTaxas').style.display === 'none' ? 'flex' : 'none'; return false;">Ver
+                                        taxas avançadas</a></div>
+                            </div>
+                            <div style="margin-top:12px; padding-top:12px; border-top:1px dashed var(--g200);">
+                                <label class="caixa-label"
+                                    style="margin-bottom:10px; display:block; color:var(--g500);">Custo de Aluguel <span
+                                        style="font-size:11px; color:var(--g400);">(opcional)</span></label>
+                                <div class="caixa-field-row">
+                                    <div class="caixa-field"><label class="caixa-label">Tempo</label>
+                                        <div class="caixa-input-group"><input type="number" id="compMesesAluguel"
+                                                class="caixa-input" placeholder="0" step="1" min="0"><span
+                                                class="caixa-suffix">meses</span></div>
+                                    </div>
+                                    <div class="caixa-field"><label class="caixa-label">Valor mensal</label>
+                                        <div class="caixa-input-group"><span class="caixa-prefix">R$</span><input
+                                                type="text" id="compValorAluguel" class="caixa-input" placeholder="0,00"
+                                                oninput="formatCurrencyInput(this)"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botão Ver Comparação -->
+                <div style="text-align:center; margin-top:28px;">
+                    <button type="button" class="btn-simular-comp" onclick="executarSimulacaoComp()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" style="margin-right:8px;">
+                            <path d="M12 3v18"></path>
+                            <path d="M5 8l7-5 7 5"></path>
+                            <rect x="2" y="14" width="8" height="7" rx="1"></rect>
+                            <rect x="14" y="10" width="8" height="11" rx="1"></rect>
+                        </svg>
+                        Ver Comparação com Consórcio
+                    </button>
+                </div>
+
+                <div class="wizard-nav" style="margin-top:16px;">
+                    <button type="button" class="tab-btn-back" onclick="wizardNext(1)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M19 12H5"></path>
+                            <path d="M12 19l-7-7 7-7"></path>
+                        </svg> Refazer simulação
+                    </button>
+                    <div></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FASE 2: RESULTADOS (hidden) -->
+        <div id="compFaseResultados" style="display: none; max-width: 900px; margin: 0 auto; padding: 24px 20px;">
+
+            <!-- Botão Nova Simulação -->
+            <div style="margin-bottom: 16px;">
+                <button type="button" class="tab-btn-back" onclick="voltarFaseInputs()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 12H5"></path>
+                        <path d="M12 19l-7-7 7-7"></path>
+                    </svg>
+                    Nova Simulação
+                </button>
+            </div>
+
+            <div class="results-panel comp-results" style="max-width: 100%; padding:0; overflow:hidden;">
+                <!-- NOVO LAYOUT DE CARDS -->
+                <div class="comp-layout-inner" style="padding: 24px 28px;">
+                    <h3
+                        style="font-size:16px; font-weight:600; color:var(--g600); margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--g200);">
+                        Comparativo</h3>
+
+                    <div class="comp-cards-container">
+                        <!-- Card Financiamento -->
+                        <div class="comp-card card-fin">
+                            <div class="card-header-fin">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 21h18"></path>
+                                    <path d="M3 10h18"></path>
+                                    <path d="M5 6l7-3 7 3"></path>
+                                    <path d="M4 10v11"></path>
+                                    <path d="M20 10v11"></path>
+                                    <path d="M8 14v3"></path>
+                                    <path d="M12 14v3"></path>
+                                    <path d="M16 14v3"></path>
+                                </svg>
+                                FINANCIAMENTO
+                            </div>
+                            <div class="card-body">
+                                <div class="c-row">
+                                    <span class="c-label">Valor Financiado</span>
+                                    <span class="c-val bold" id="compCreditoFin">R$ 0,00</span>
+                                </div>
+                                <div class="c-row">
+                                    <span class="c-label">Prazo</span>
+                                    <span class="c-val bold"><span id="compPrazoDisplayFin">0</span> meses</span>
+                                </div>
+                                <div class="c-row">
+                                    <span class="c-label">Parcela inicial</span>
+                                    <span class="c-val bold" id="compParcelaFin">R$ 0,00</span>
+                                </div>
+                                <div class="c-row">
+                                    <span class="c-label">Parcela final (SAC)</span>
+                                    <span class="c-val bold" id="compParcelaFinalFin">R$ 0,00</span>
+                                </div>
+                                <div class="c-row"
+                                    style="border-top: 1px dashed rgba(255, 255, 255, 0.2); margin-top: 4px; padding-top: 8px;">
+                                    <span class="c-label">Total de juros</span>
+                                    <span class="c-val bold" id="compJurosFin" style="color: #ff3333;">R$ 0,00</span>
+                                </div>
+                            </div>
+                            <div class="card-footer-fin">
+                                <span class="c-label" style="display:flex; align-items:center; gap:6px; color:#c7d2fe;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="M12 6v6l4 2"></path>
+                                    </svg>
+                                    Total Pago
+                                </span>
+                                <span class="c-val bold" id="compCustoFinalFin" style="font-size:18px; color:#fff;">R$
+                                    0,00</span>
+                            </div>
+                        </div>
+
+                        <!-- Card Consórcio -->
+                        <div class="comp-card card-con">
+                            <div class="card-header-con">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                                CONSÓRCIO
+                            </div>
+                            <div class="card-body">
+                                <div class="c-row">
+                                    <span class="c-label">Crédito</span>
+                                    <span class="c-val bold" id="compCreditoCon" style="color:#785713;">R$ 0,00</span>
+                                </div>
+                                <div class="c-row">
+                                    <span class="c-label">Lance</span>
+                                    <span class="c-val bold" id="compCustoEntradaCon" style="color:#785713;">R$
+                                        0,00</span>
+                                </div>
+                                <div class="c-row">
+                                    <span class="c-label">Prazo</span>
+                                    <span class="c-val bold" style="color:#785713;"><span
+                                            id="compPrazoDisplayCon">0</span>
+                                        meses</span>
+                                </div>
+                                <div class="c-row">
+                                    <span class="c-label">Parcela</span>
+                                    <span class="c-val bold" id="compParcelaCon" style="color:#785713;">R$ 0,00</span>
+                                </div>
+                                <div class="c-row" id="rowAdesaoCon" style="display: none;">
+                                    <span class="c-label">Adesão</span>
+                                    <span class="c-val bold" id="compAdesaoConDisplay" style="color:#785713;">R$
+                                        0,00</span>
+                                </div>
+                                <div class="c-row" id="rowAluguelCon"
+                                    style="display: none; border-top: 1px dashed rgba(120, 87, 19, 0.2); margin-top: 4px; padding-top: 8px;">
+                                    <span class="c-label">Aluguel</span>
+                                    <span class="c-val bold" id="compCustoAluguelCon" style="color:#785713;">R$
+                                        0,00</span>
+                                </div>
+                            </div>
+                            <div class="card-footer-con">
+                                <span class="c-label" style="display:flex; align-items:center; gap:6px; color:#5c430e;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="M12 6v6l4 2"></path>
+                                    </svg>
+                                    Total Pago
+                                </span>
+                                <span class="c-val bold" id="compCustoFinalCon"
+                                    style="font-size:18px; color:#3b2a09;">R$
+                                    0,00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD ECONOMIA -->
+                    <div class="economy-card">
+                        <div class="eco-header">
+                            <div class="eco-left-tab">
+                                <div class="eco-icon-circle">
+                                    <span class="eco-icon-dollar">$</span>
+                                </div>
+                            </div>
+                            <div class="eco-content">
+                                <span class="eco-label">ECONOMIA AO ESCOLHER O CONSORCIO</span>
+                                <span class="eco-subtitle"><strong id="compDiffMeses" style="color:#111;">0
+                                        meses</strong> mais rápido que o financiamento.</span>
+                            </div>
+                            <div class="eco-values">
+                                <span class="eco-amount" id="compEcoPuroVal">R$ 0,00</span>
+                            </div>
+                        </div>
+
+                        <div class="eco-bars">
+                            <div class="bar-row">
+                                <span class="bar-label">FINANCIAMENTO</span>
+                                <div class="bar-track">
+                                    <div class="bar-fill blue" id="barFin" style="width: 100%;"></div>
+                                </div>
+                                <span class="bar-val" id="barValFin">R$ 0M</span>
+                            </div>
+                            <div class="bar-row">
+                                <span class="bar-label">CONSÓRCIO</span>
+                                <div class="bar-track">
+                                    <div class="bar-fill gold" id="barCon" style="width: 45%;"></div>
+                                </div>
+                                <span class="bar-val" id="barValCon">R$ 0M</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BOTÃO GERAR PDF INFERIOR -->
+                    <div style="display:flex; justify-content:flex-end; margin-top: 16px;">
+                        <button class="btn-pdf-gold" onclick="gerarPDFComparativo()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                style="margin-right:8px;">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            Gerar PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- Fim tabComparativo -->
+    <script src="logos.js"></script>
+    <script src="script.js?v=20260306c"></script>
+    <script src="pdf_comp.js?v=20260306c"></script>
+    <script src="pdf_simulador.js?v=20260309"></script>
+    <!-- LOGIN OVERLAY -->
+    <div id="loginOverlay">
+        <div class="login-card">
+            <img src="logo-nova.png" alt="Aurenn Capital" class="login-logo">
+            <h2 style="margin-bottom: 20px; font-size: 18px; color: #333; font-weight: 600;">Plataforma Exclusiva
+            </h2>
+            <form onsubmit="handleLogin(event)">
+                <input type="password" id="passwordInput" class="login-input" placeholder="Senha de Acesso" required>
+                <button type="submit" class="login-btn">Entrar</button>
+                <p id="loginError" class="error-msg">Senha incorreta</p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Check if already authenticated
+        (function () {
+            const saved = localStorage.getItem('cr_auth');
+            if (saved === 'vendas@2026') {
+                document.getElementById('loginOverlay').style.display = 'none';
+            }
+        })();
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('passwordInput').value;
+            // Senha definida: vendas@2026
+            if (pass === 'vendas@2026') {
+                localStorage.setItem('cr_auth', pass);
+                document.getElementById('loginOverlay').style.display = 'none';
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consórcio de Imóveis - Embracon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Montserrat:wght@700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 1080px;
+            height: 1080px;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+        }
+
+        .container {
+            width: 1080px;
+            height: 1080px;
+            position: relative;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Background decorative image overlay */
+        .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 340px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+            z-index: 0;
+        }
+
+        .bg-overlay::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(to bottom, transparent, #111);
+        }
+
+        /* House icon decorative */
+        .house-icon {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            width: 120px;
+            height: 120px;
+            opacity: 0.15;
+            z-index: 1;
+        }
+
+        .house-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: white;
+        }
+
+        /* Title section */
+        .title-area {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 40px 50px 20px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .title-left h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 52px;
+            color: white;
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .title-left h1 .italic {
+            font-style: italic;
+            color: #e63946;
+        }
+
+        .title-left h1 .white {
+            font-weight: 800;
+            color: white;
+        }
+
+        .badge {
+            background: #e63946;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 6px;
+            text-align: center;
+            transform: rotate(-2deg);
+            box-shadow: 0 4px 20px rgba(230, 57, 70, 0.4);
+        }
+
+        .badge .parcelas {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .badge .percent {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .badge .menores {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        /* Table section */
+        .table-section {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 20px 50px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #1a1a2e, #2d2d4e);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px 12px 0 0;
+            padding: 16px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+        }
+
+        .table-header svg {
+            width: 28px;
+            height: 28px;
+            fill: #e63946;
+        }
+
+        .table-header span {
+            font-weight: 800;
+            font-size: 20px;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 0 0 12px 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        thead th {
+            background: #2d2d4e;
+            color: white;
+            font-weight: 700;
+            font-size: 17px;
+            padding: 16px 20px;
+            text-align: center;
+            border-bottom: 3px solid #e63946;
+        }
+
+        tbody tr {
+            transition: background 0.2s;
+        }
+
+        tbody tr:nth-child(even) {
+            background: rgba(240, 240, 245, 0.8);
+        }
+
+        tbody tr:nth-child(odd) {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        tbody td {
+            padding: 18px 20px;
+            text-align: center;
+            font-size: 19px;
+            font-weight: 600;
+            color: #1a1a2e;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        tbody td:first-child {
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        tbody td:nth-child(2) {
+            color: #e63946;
+            font-weight: 700;
+        }
+
+        tbody td:nth-child(3) {
+            color: #2d8a4e;
+            font-weight: 700;
+        }
+
+        /* Footer */
+        .footer {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 16px 50px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer .note {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+
+        .footer .logos {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .footer .logo-crinvest {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer .logo-crinvest img {
+            height: 45px;
+        }
+
+        .footer .logo-embracon {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer .logo-embracon img {
+            height: 40px;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 18px;
+            color: white;
+        }
+
+        .logo-text .brand {
+            font-size: 24px;
+            font-weight: 900;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Background -->
+        <div class="bg-overlay"></div>
+
+        <!-- Decorative house icon -->
+        <div class="house-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+            </svg>
+        </div>
+
+        <!-- Title area -->
+        <div class="title-area">
+            <div class="title-left">
+                <h1>
+                    <span class="italic">CONSÓRCIO</span><br>
+                    <span class="white">DE IMÓVEL</span>
+                </h1>
+            </div>
+            <div class="badge">
+                <div class="parcelas">PARCELAS</div>
+                <div class="percent">50%</div>
+                <div class="menores">MENORES</div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-section">
+            <div class="table-header">
+                <svg viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                </svg>
+                <span>Consórcio de Imóveis</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Valor do Crédito</th>
+                        <th>1ª a 12ª Parcela</th>
+                        <th>Demais Parcelas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>500 mil</td>
+                        <td>R$ 2.120,83</td>
+                        <td>R$ 1.620,83</td>
+                    </tr>
+                    <tr>
+                        <td>600 mil</td>
+                        <td>R$ 2.495,00</td>
+                        <td>R$ 1.895,00</td>
+                    </tr>
+                    <tr>
+                        <td>700 mil</td>
+                        <td>R$ 2.910,83</td>
+                        <td>R$ 2.210,83</td>
+                    </tr>
+                    <tr>
+                        <td>800 mil</td>
+                        <td>R$ 3.326,67</td>
+                        <td>R$ 2.526,67</td>
+                    </tr>
+                    <tr>
+                        <td>900 mil</td>
+                        <td>R$ 3.742,50</td>
+                        <td>R$ 2.842,50</td>
+                    </tr>
+                    <tr>
+                        <td>1 milhão</td>
+                        <td>R$ 4.158,33</td>
+                        <td>R$ 3.158,33</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="note">*Parcelas 50% menores até a contemplação</div>
+            <div class="logos">
+                <div class="logo-crinvest">
+                    <img src="logo-crinvest.png" alt="Aurenn Capital">
+                </div>
+                <div class="logo-embracon">
+                    <img src="logo-embracon.png" alt="Embracon">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
