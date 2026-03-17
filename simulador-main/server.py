@@ -88,7 +88,9 @@ class ComparativoPDF(FPDF):
         self.set_line_width(0.3)
         self.line(15, 28, 195, 28)
         
-        logo_path = os.path.join(DIR, 'logo-nova.png')
+        logo_path = os.path.join(DIR, 'logo-nova-transparent.png')
+        if not os.path.isfile(logo_path):
+            logo_path = os.path.join(DIR, 'logo-nova.png')
         if os.path.isfile(logo_path):
             self.image(logo_path, 15, 4, w=24)
 
@@ -525,7 +527,9 @@ class SimuladorEstrategicoPDF(FPDF):
         
     def build_header(self):
         # Top Logo Aurenn Capital
-        logo_cr_path = os.path.join(DIR, 'logo-nova.png')
+        logo_cr_path = os.path.join(DIR, 'logo-nova-transparent.png')
+        if not os.path.isfile(logo_cr_path):
+            logo_cr_path = os.path.join(DIR, 'logo-nova.png')
         if os.path.isfile(logo_cr_path):
             self.image(logo_cr_path, 15, 13, h=23) # Height matched to text block
             
@@ -534,6 +538,9 @@ class SimuladorEstrategicoPDF(FPDF):
         self.set_line_width(0.3)
         self.line(60, 15, 60, 35)
         
+        mode = self.data.get('mode', 'integral')
+        pct_reducao = self.data.get('pctReducao', '25')
+
         self.set_xy(65, 13)
         self.set_font('Helvetica', '', 14)
         self.set_text_color(*self.DARK)
@@ -546,7 +553,11 @@ class SimuladorEstrategicoPDF(FPDF):
         self.set_xy(65, 30)
         self.set_font('Helvetica', '', 11)
         self.set_text_color(120, 120, 120)
-        self.cell(0, 5, 'D E   C O N S Ó R C I O')
+        
+        if mode == 'reduzida':
+            self.cell(0, 5, f'D E   C O N S Ó R C I O   ({pct_reducao}% REDUZIDA)')
+        else:
+            self.cell(0, 5, 'D E   C O N S Ó R C I O')
         
         # Bottom Golden Line for Title
         self.set_draw_color(*self.GOLD)

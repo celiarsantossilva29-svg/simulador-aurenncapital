@@ -510,7 +510,7 @@ function gerarPDFSimuladorFrontend() {
         const d = adminData[adminKey];
         // Use Base64 logos if available to avoid Tainted Canvas
         const adminLogoSrc = (d && d.logo && logoBase64[d.logo]) ? logoBase64[d.logo] : (d ? d.logo : '');
-        const headerLogoSrc = logoBase64['logo-nova.png'] || 'logo-nova.png';
+        const headerLogoSrc = logoBase64['logo-nova-transparent.png'] || 'logo-nova-transparent.png';
 
         const adminColor = d ? d.color : '#333';
 
@@ -518,12 +518,10 @@ function gerarPDFSimuladorFrontend() {
         const tipoText = tipo.options[tipo.selectedIndex].text;
 
         let modeLabel = currentMode === 'integral' ? 'Parcela Integral' : 'Parcela Reduzida';
-        if (currentMode === 'reduzida') {
-            const valRed = parseFloat(document.getElementById('pctReducao').value) || 25;
-            // User requested to show the reduction percentage itself as "X% until contemplation"
-            // Example: "25% até a Contemplação" (meaning paying 75%? Or paying 25%? User wording is key.)
-            // The prompt says: "se a redução é de 25% ent quero que escreva 25% ate a contemplação"
-            // So we use 'valRed' directly.
+        let isReduzida = (currentMode === 'reduzida');
+        let valRed = 25;
+        if (isReduzida) {
+            valRed = parseFloat(document.getElementById('pctReducao').value) || 25;
             modeLabel += ` (${valRed}% até Contemplação)`;
         }
         const primeirasN = document.getElementById('primeirasN').value;
@@ -679,7 +677,10 @@ function gerarPDFSimuladorFrontend() {
         <div id="pdf-content">
             <div class="pdf-header">
                 <div class="pdf-header-left">
-                    <img src="${headerLogoSrc}">
+                    <div style="display:flex; flex-direction:column; align-items:center; line-height:1; gap:3px;">
+                        <span style="font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:700; letter-spacing:8px; color:#111; text-transform:uppercase;">AURENN</span>
+                        <span style="font-family:'Inter',sans-serif; font-size:9px; font-weight:500; letter-spacing:4px; color:#c9a84c; text-transform:uppercase;">CAPITAL</span>
+                    </div>
                 </div>
                 <div class="pdf-header-center">
                     <h2>SIMULAÇÃO</h2>
@@ -721,7 +722,14 @@ function gerarPDFSimuladorFrontend() {
                 </div>
             </div>
 
-            <div class="pdf-cols">
+            ${isReduzida ? `
+            <div style="border:1.5px solid #d4af37; border-radius:4px; margin-top:14px; padding:10px; display:flex; justify-content:center; align-items:center; gap:10px;">
+                <span style="color:#d4af37; font-weight:600; font-size:22px; line-height:1; font-family:Courier, monospace;">%</span>
+                <span style="font-size:12px; font-weight:800; color:#333; letter-spacing:0.8px;">PLANO COM <span style="color:#c53030;">PARCELA REDUZIDA EM ${valRed}% ATÉ A CONTEMPLAÇÃO</span></span>
+            </div>
+            ` : ''}
+
+            <div class="pdf-cols" style="margin-top: ${isReduzida ? '14px' : '16px'};">
                 <!-- ESTRATÉGIA DE LANCE -->
                 <div class="pdf-col">
                     <div class="pdf-col-title">
@@ -795,6 +803,7 @@ function gerarPDFSimuladorFrontend() {
                             </div>
                             <div class="pdf-sb-info">
                                 <span class="pdf-sb-lbl">PARCELAS<br>ANTES DA<br>CONTEMPLAÇÃO</span>
+                                ${isReduzida ? `<span class="pdf-sb-sub" style="color:#e53e3e; font-weight:bold; font-size:6px;">(-${valRed}%)</span>` : ''}
                             </div>
                         </div>
                         <div class="pdf-sb-val-wrap">

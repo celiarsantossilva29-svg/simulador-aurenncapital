@@ -53,6 +53,9 @@ window.gerarPDFSimulador = async function() {
         const obsEl = document.getElementById('observacoes');
         const observacoesTxt = obsEl ? obsEl.innerText : '';
 
+        const pctReducao = document.getElementById('pctReducao') ? document.getElementById('pctReducao').value : '25';
+        const modoAtual = window.currentMode || 'integral';
+
         // Montar Payload
         const payload = {
             administradora: nomeAdministradora,
@@ -61,6 +64,8 @@ window.gerarPDFSimulador = async function() {
             prazo: paramPrazo,
             reduzir_apos_contemplar: tipoReducao,
             observacoes: observacoesTxt,
+            mode: modoAtual,
+            pctReducao: pctReducao,
             
             lances: {
                 embutido_pct: pctLanceEmbutido,
@@ -95,7 +100,7 @@ window.gerarPDFSimulador = async function() {
         }
 
         const arrayBuffer = await response.arrayBuffer();
-        baixarPDFBuffer(arrayBuffer, `Simulacao_Estrategica_CRInvest_${nomeAdministradora}.pdf`);
+        baixarPDFBuffer(arrayBuffer, `Simulacao_Estrategica_AurennCapital_${nomeAdministradora}.pdf`);
 
     } catch (e) {
         console.error('Erro ao gerar PDF do Simulador:', e);
